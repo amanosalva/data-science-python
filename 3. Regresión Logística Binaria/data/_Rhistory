@@ -1,0 +1,434 @@
+setwd("E:/Programa de Especialización - Data Science - Anthony Manosalva/R_Python/Modulo III_Clasificacion_Regresion_Logistica_Binaria/DataSet")
+library("readxl")
+library("ggplot2")
+library(glmnet)
+library(gee)
+library(readxl)
+library(leaps)
+library(dplyr)
+library(caret)
+library(pROC)
+Train=read.csv("train_t.csv")
+sample_n(Train, 3)
+cor(Train[,1:8])
+library(corrplot)
+corrplot(cor(Train[,1:8]), method = "number")
+set.seed(123)
+training.samples <- Train$Loan_Status %>%
+createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Train[training.samples, ]
+test.data <- Train[-training.samples, ]
+table(train.data$Loan_Status)
+155/(155+337)
+modelo_logistica=glm(Loan_Status~.,data=train.data,family="binomial" )
+summary(modelo_logistica)
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+## calcular el AUC
+auc_modelo1=AUC1$auc
+AUC1 <- roc(test.data$Loan_Status, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+PRED=ifelse(PRED<=0.5,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precision
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=test.data$Loan_Status)
+Sensitivity1
+Accuracy1
+error1
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+PRED=ifelse(PRED<=0.31,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precision
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=test.data$Loan_Status)
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+AUC1 <- roc(test.data$Loan_Status, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.31,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precision
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=test.data$Loan_Status)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+Train$Loan_Status = as.factor(Train$Loan_Status)
+sample_n(Train, 3)
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(Train[,1:8])
+corrplot(cor(Train[,1:8]), method = "number")
+set.seed(123)
+training.samples <- Train$Loan_Status %>%
+createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Train[training.samples, ]
+test.data <- Train[-training.samples, ]
+# balanceado?
+table(train.data$Loan_Status)
+155/(155+337)
+modelo_logistica=glm(Loan_Status~.,data=train.data,family="binomial" )
+## SBS: TODAS LAS VARIABLES SIGNIFICATIVAS PARA QUE LAS VARIABLES SEAN ESTABLES EN EL TIEMPO,
+#POR AHORA NO...
+summary(modelo_logistica)
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+AUC1 <- roc(test.data$Loan_Status, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.31,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(as.numeric(Train[,1:8]))
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(Train[,2:8])
+corrplot(cor(Train[,2:8]), method = "number")
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+a <- Train
+a[,c(1,3)]
+head(a[,c(1,3)])
+head(a[,c(1,3,5)])
+head(a[,c(1,3,5,9)])
+rm(list=ls())
+rm(list=ls())
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = as.factor(Train$diabetes)
+sample_n(Train, 3)
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(Train[,2:8])
+corrplot(cor(Train[,2:8]), method = "number")
+set.seed(123)
+training.samples <- Train$diabetes %>%
+createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Train[training.samples, ]
+test.data <- Train[-training.samples, ]
+# balanceado?
+table(train.data$Loan_Status)
+# balanceado?
+table(train.data$diabetes)
+#Proporción
+210/(210 + 104)
+modelo_logistica=glm(diabetes~.,data=train.data,family="binomial" )
+summary(modelo_logistica)
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+sample_n(Train, 3)
+AUC1 <- roc(test.data$Loan_Status, proba1)
+AUC1 <- roc(test.data$diabetes, proba1)
+AUC1 <- roc(test.data$diabetes, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+mean(train.data$diabetes)
+mean(as.factor(train.data$diabetes))
+# balanceado?
+table(train.data$diabetes)
+155+ (155 + 337)
+155/ (155 + 337)
+210 +
+a
+1
+210/(210 + 104)
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.0.6687898,0,1)
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.6687898,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$Loan_Status,positive = "1")
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "1")
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "yes")
+test.data$diabetes
+as.factor(test.data$diabetes)
+# Calcular la matriz de confusi?n
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "pos")
+as.numeric(test.data$diabetes)
+# Calcular la matriz de confusión
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "pos")
+PRED
+# Calcular la matriz de confusión
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "1")
+test.data$diabetes
+ifelse(test.data$diabetes == "pos", 1, 0)
+# Calcular la matriz de confusión
+tabla=confusionMatrix(PRED,ifelse(test.data$diabetes == "pos", 1, 0),positive = "1")
+tabla
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precision
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=test.data$Loan_Status)
+Sensitivity1
+Accuracy1
+error1
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=test.data$diabetes)
+# Calcular el error de mala clasificaci?n
+error1=mean(PRED!=ifelse(test.data$diabetes == "pos", 1, 0))
+PRED
+test.data$diabetes
+ifelse(test.data$diabetes == "pos", 1, 0)
+head(Train)
+str(PRED)
+str(test.data$diabetes)
+Train$diabetes
+rm(list=ls())
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = as.factor(Train$diabetes)
+Train$diabetes = ifelse(Train$diabetes == "pos", "1","0")
+sample_n(Train, 3)
+Train$diabetes = ifelse(Train$diabetes === "pos", "1","0")
+Train$diabetes = ifelse(Train$diabetes = "pos", "1","0")
+rm(list=ls())
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = as.factor(Train$diabetes)
+Train$diabetes = ifelse(Train$diabetes = "pos", "1","0")
+Train$diabetes = ifelse(Train$diabetes="pos",1,0)
+Train$diabetes = ifelse(Train$diabetes=="pos",1,0)
+rm(list=ls())
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = as.factor(Train$diabetes)
+Train$diabetes = ifelse(Train$diabetes=="pos",1,0)
+Train$diabetes
+## Observar aleatoriamente 3 valores de la data
+str(Train$diabetes)
+Train$diabetes = as.factor(Train$diabetes)
+## Observar aleatoriamente 3 valores de la data
+str(Train$diabetes)
+sample_n(Train, 3)
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = as.factor(Train$diabetes)
+Train$diabetes = ifelse(Train$diabetes=="pos",1,0)
+Train$diabetes = as.factor(Train$diabetes)
+## Observar aleatoriamente 3 valores de la data
+str(Train$diabetes)
+sample_n(Train, 3)
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(Train[,2:8])
+corrplot(cor(Train[,2:8]), method = "number")
+set.seed(123)
+training.samples <- Train$diabetes %>%
+createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Train[training.samples, ]
+test.data <- Train[-training.samples, ]
+# balanceado?
+table(train.data$diabetes)
+#Proporción
+210/(210 + 104)
+modelo_logistica=glm(diabetes~.,data=train.data,family="binomial" )
+summary(modelo_logistica)
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+AUC1 <- roc(test.data$diabetes, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.6687898,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusión
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "1")
+tabla
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precisión
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificación
+error1=mean(PRED!=test.data$diabetes == "pos")
+# Calcular el error de mala clasificación
+error1=mean(PRED!=test.data$diabetes="pos")
+# Calcular el error de mala clasificación
+error1=mean(PRED!=test.data$diabetes)
+rm(list=ls())
+rm(list=ls())
+rm(list=ls())
+Train=read.csv("PimaIndiansDiabetes.csv")
+head(Train)
+Train$diabetes = ifelse(Train$diabetes=="pos",1,0)
+Train$diabetes = as.factor(Train$diabetes)
+## Observar aleatoriamente 3 valores de la data
+str(Train$diabetes)
+sample_n(Train, 3)
+## supuestos
+#por defecto pearson, en caso de querer spearman, colocar el parámetro.
+cor(Train[,2:8])
+corrplot(cor(Train[,2:8]), method = "number")
+set.seed(123)
+training.samples <- Train$diabetes %>%
+createDataPartition(p = 0.8, list = FALSE)
+train.data  <- Train[training.samples, ]
+test.data <- Train[-training.samples, ]
+# balanceado?
+table(train.data$diabetes)
+#Proporción
+210/(210 + 104)
+modelo_logistica=glm(diabetes~.,data=train.data,family="binomial" )
+summary(modelo_logistica)
+proba1=predict(modelo_logistica, newdata=test.data,type="response")
+AUC1 <- roc(test.data$diabetes, proba1)
+## calcular el AUC
+auc_modelo1=AUC1$auc
+auc_modelo1
+## calcular el GINI
+gini1 <- 2*(AUC1$auc) -1
+gini1
+# Calcular los valores predichos
+PRED <-predict(modelo_logistica,test.data,type="response")
+#PRED=ifelse(PRED<=0.5,0,1  )  #nooo
+PRED=ifelse(PRED<=0.6687898,0,1)
+PRED=as.factor(PRED)
+# Calcular la matriz de confusión
+tabla=confusionMatrix(PRED,test.data$diabetes,positive = "1")
+tabla
+# sensibilidad
+Sensitivity1=as.numeric(tabla$byClass[1])
+# Precisión
+Accuracy1=tabla$overall[1]
+# Calcular el error de mala clasificación
+error1=mean(PRED!=test.data$diabetes)
+Sensitivity1
+Accuracy1
+error1
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+# indicadores
+auc_modelo1
+gini1
+Accuracy1
+error1
+Sensitivity1
+cbind(auc_modelo1, gini1, Sensitivity1, Accuracy1, error1)
+nuevo=read_excel("carros2011imputado2.xlsx")
+head(Train)
+Train=read_excel("carros2011imputado2.xlsx")
+Train=read_excel("carros2011imputado2.xlsx")
+head(Train)
+Train=as.data.frame(Train)
+head(Train)
+str(Train)
+Train$tracción
+Train$fabricante <- as.numeric(Train$fabricante)
+Train$fabricante <- as.factor(Train$fabricante)
+Train$fabricante
+Train=read_excel("carros2011imputado2.xlsx")
+Train=as.data.frame(Train)
+str(Train)
+Train$fabricante <- as.numeric(Train$fabricante)
+Train=read_excel("carros2011imputado2.xlsx")
+Train=as.data.frame(Train)
+str(Train)
+Train$fabricante <- as.factor(Train$fabricante)
+Train$fabricante <- as.numeric(Train$fabricante)
+Train$fabricante
+Train$fabricante <- as.factor(Train$fabricante)
+Train$fabricante <- as.numeric(Train$fabricante)
+Train$modelo <- as.factor(Train$modelo)
+Train$modelo <- as.numeric(Train$modelo)
+Train$tipo <- as.factor(Train$tipo)
+Train$tipo <- as.numeric(Train$tipo)
+Train$numero_de_airbags <- as.factor(Train$numero_de_airbags)
+Train$numero_de_airbags <- as.numeric(Train$numero_de_airbags)
+Train$tracción <- as.factor(Train$tracción)
+Train$tracción <- as.numeric(Train$tracción)
+Train$hecho_o_no_en_USA <- as.factor(Train$hecho_o_no_en_USA)
+Train$hecho_o_no_en_USA <- as.numeric(Train$hecho_o_no_en_USA)
+str(Train)
+Train$transmisión_manual
+Train$transmisión_manual <- ifelse(Train$transmisión_manual == "Si", 1, 0)
+levels(as.factor(Train$transmisión_manual))
+Train$transmisión_manual <- ifelse(Train$transmisión_manual == "Si", 1, 0)
+Train$transmisión_manual = as.factor(Train$transmisión_manual)
+head(Train)
+## Observar aleatoriamente 3 valores de la data
+str(Train$transmisión_manual)
+sample_n(Train, 3)
+names(Train)
+Train
+a <- c("si","no","si")
+a
+ifelse(a == "si", 1, 0)
+a <- c("si","no","si")
+a
+a <- as.numeric(a)
+a <- c("si","no","si")
+a <- as.factor(a)
+a <- as.numeric(a)
+a
+sample_n(Train, 6)
+a(c(1:2))
+a
+Train[,c(2:23)]
+clear
+Train[,c(2:23,24)]
+names(Train[,c(2:23,24)])
+names(Train[,c(2:23,25)])
+134217728/1024
+131072/1024

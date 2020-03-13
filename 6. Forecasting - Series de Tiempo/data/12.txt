@@ -1,0 +1,3 @@
+###arima con R
+
+http://statisticalecology-st.blogspot.com/2011/01/construccion-de-modelos-arima-en-r.html

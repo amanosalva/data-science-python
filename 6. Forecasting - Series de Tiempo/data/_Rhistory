@@ -1,0 +1,183 @@
+gas = scan('http://www.uam.es/joser.berrendero/datos/gas6677.dat')
+plot(gas)
+plot(gas,type="l")
+gas.ts = ts(gas, start = c(1966,1), frequency = 12)
+print(gas.ts)
+boxplot(gas.ts ~ cycle(gas.ts))
+cycle(gas.ts)
+gas.ts.desc = decompose(gas.ts)
+plot(gas.ts.desc, xlab='Año')
+gas.ts.desc
+?filter
+plot(filter(AirPassengers,filter=rep(1/3,3),sides=2,method="convolution"))
+plot(filter(AirPassengers,filter=rep(1/5,5),sides=2,method="convolution"))
+plot(filter(AirPassengers,filter=rep(1/3,3),sides=2,method="convolution"))
+plot(filter(AirPassengers,filter=rep(1/5,5),sides=2,method="convolution"))
+plot(filter(AirPassengers,filter=rep(1/9,9),sides=2,method="convolution"))
+plot(decompose(co2))
+plot(co2)
+rm(list=ls())
+library(ggplot2)
+library(TSA)
+library(forecast)
+library(scales)
+library(stats)
+Yt<-read.delim("datatesisaereo.txt",header=T)
+setwd("C:/Users/WAVE PC/Desktop/DIPLOMADO DS/NIVEL INTERMEDIO/1er DATA SCIENCIE NIVEL INTERMEDIO/CLASE 10 R/DATAS")
+Yt<-read.delim("datatesisaereo.txt",header=T)
+Yt<-ts(Yt,start=c(2000,1),freq=12)
+date<-seq(as.Date("2000/01/01"),as.Date("2012/12/01"),by="months")
+data<-data.frame(Yt,date)
+fit<-auto.arima(Yt)
+fit
+plot(Yt,col="lightblue",
+main="Grafico de la serie ...",
+ylab="Viajeros (en miles)",
+xlab="Tiempo")
+plot(Yt,col="blue",
+main="Grafico de la serie ...",
+ylab="Viajeros (en miles)",
+xlab="Tiempo")
+lambda<-BoxCox.lambda(Yt,lower=-5,upper=5)
+Yt_t<-BoxCox(Yt,lambda=lambda)
+plot(Yt_t,col="lightblue",
+main="Grafico de la serie .......",
+ylab="Migracion(ejemplo) (en miles)",
+xlab="Tiempo")
+plot(Yt_t,col="red",
+main="Grafico de la serie .......",
+ylab="Migracion(ejemplo) (en miles)",
+xlab="Tiempo")
+acf(Yt_t,lag.max=39,
+xaxp=c(0,16,16),
+main="ACF de la serie ......",
+ylab="Autocorrelaciones",
+xlab="Retardo")
+pacf(Yt_t,lag.max=39,
+xaxp=c(0,16,16),
+main="PACF de la serie .......",
+ylab="Autocorrelaciones parciales",
+xlab="Retardo")
+Yt_t_1r<-diff(Yt_t,1,1)
+plot(Yt_t_1r,
+main="Grafico de la serie ...... diferenciada una vez regularmente",
+ylab="Migraciones (en miles)",
+xlab="Tiempo")
+Yt_t_1r<-diff(Yt,1,1)
+plot(Yt_t_1r,
+main="Grafico de la serie ...... diferenciada una vez regularmente",
+ylab="Migraciones (en miles)",
+xlab="Tiempo")
+acf(Yt_t_1r,lag.max=39,
+xaxp=c(0,16,16),
+main="ACF de la serie ......",
+ylab="Autocorrelaciones",
+xlab="Retardo")
+pacf(Yt_t_1r,lag.max=39,
+xaxp=c(0,16,16),
+main="PACF de la serie .......",
+ylab="Autocorrelaciones parciales",
+xlab="Retardo")
+par(mfrow=c(1,2))
+acf(Yt_t_1r,lag.max=39,
+xaxp=c(0,16,16),
+main="ACF de la serie ......",
+ylab="Autocorrelaciones",
+xlab="Retardo")
+pacf(Yt_t_1r,lag.max=39,
+xaxp=c(0,16,16),
+main="PACF de la serie .......",
+ylab="Autocorrelaciones parciales",
+xlab="Retardo")
+fit<-Arima(Yt,order=c(0,1,1),seasonal=list(order=c(0,1,1),period=12))
+fit
+plot(fit$residuals,
+main="",
+ylab="",
+xlab="Tiempo")
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+ks.test(fit$residuals,"pnorm")
+acf(fit$residuals,lag.max=39,   ##n/4
+xaxp=c(0,20,20),
+main="",
+ylab="Autocorrelacion",
+xlab="Retardo")
+Box.test(fit$residuals,lag=1,type="Ljung-Box",fitdf=0)
+Box.test(fit$residuals,lag=1,type="Box-Pierce",fitdf=0)
+plot(forecast(fit,h=24),col="red")
+par(mfrom=c(1,1))
+par(mfrow=c(1,1))
+plot(forecast(fit,h=24),col="red")
+fit<-Arima(Yt,order=c(1,1,1),seasonal=list(order=c(1,0,1),period=12))
+fit
+plot(fit$residuals,
+main="",
+ylab="",
+xlab="Tiempo")
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+ks.test(fit$residuals,"pnorm")
+acf(fit$residuals,lag.max=39,   ##n/4
+xaxp=c(0,20,20),
+main="",
+ylab="Autocorrelacion",
+xlab="Retardo")
+Box.test(fit$residuals,lag=1,type="Ljung-Box",fitdf=0)
+Box.test(fit$residuals,lag=1,type="Box-Pierce",fitdf=0)
+par(mfrow=c(1,1))
+plot(forecast(fit,h=24),col="red")
+fit<-Arima(Yt,order=c(1,1,0),seasonal=list(order=c(1,0,0),period=12))
+fit
+plot(fit$residuals,
+main="",
+ylab="",
+xlab="Tiempo")
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+ks.test(fit$residuals,"pnorm")
+acf(fit$residuals,lag.max=39,   ##n/4
+xaxp=c(0,20,20),
+main="",
+ylab="Autocorrelacion",
+xlab="Retardo")
+Box.test(fit$residuals,lag=1,type="Ljung-Box",fitdf=0)
+Box.test(fit$residuals,lag=1,type="Box-Pierce",fitdf=0)
+par(mfrow=c(1,1))
+plot(forecast(fit,h=24),col="red")
+fit<-Arima(Yt,order=c(1,1,1),seasonal=list(order=c(2,0,1),period=12))
+fit
+plot(fit$residuals,
+main="",
+ylab="",
+xlab="Tiempo")
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+ks.test(fit$residuals,"pnorm")
+acf(fit$residuals,lag.max=39,   ##n/4
+xaxp=c(0,20,20),
+main="",
+ylab="Autocorrelacion",
+xlab="Retardo")
+Box.test(fit$residuals,lag=1,type="Ljung-Box",fitdf=0)
+Box.test(fit$residuals,lag=1,type="Box-Pierce",fitdf=0)
+par(mfrow=c(1,1))
+plot(forecast(fit,h=24),col="red")
+fit<-Arima(Yt,order=c(2,1,1),seasonal=list(order=c(1,0,0),period=12))
+fit
+plot(fit$residuals,
+main="",
+ylab="",
+xlab="Tiempo")
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+ks.test(fit$residuals,"pnorm")
+acf(fit$residuals,lag.max=39,   ##n/4
+xaxp=c(0,20,20),
+main="",
+ylab="Autocorrelacion",
+xlab="Retardo")
+par(mfrow=c(1,1))
+Box.test(fit$residuals,lag=1,type="Ljung-Box",fitdf=0)
+Box.test(fit$residuals,lag=1,type="Box-Pierce",fitdf=0)
+plot(forecast(fit,h=24),col="red")
